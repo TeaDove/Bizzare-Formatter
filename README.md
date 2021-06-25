@@ -3,13 +3,47 @@ Easy way to create beautiful images from python code
 ## Install
 `pip3 install git+https://github.com/teadove/bizzare_formatter`
 ## Examples
-inputted code:
+inputted code in `example.py`:
 ```angular2html
-a = 200
-b = 200
-print(a is b)
+class A:
+    def test(self):
+        print("A")
+
+class B(A):
+    def test(self):
+        print("B")
+        super().test()
+
+class C(A):
+    def test(self):
+        print("C")
+
+class D(B, C):
+    def new_test(self):
+        print("D")
+
+obj = D()
+print(D.mro())
+obj.test()
 ```
 Compile image:<br>
-`cat example_2.py | bizzare-formatter -c=4`<br>
-Result:
-![image](bizzare_formatter/image.png)
+`bizzare-formatter example.py -c=2`<br>
+Result:<br>
+![image](bizzare_formatter/example.py.png)
+## Options
+```
+usage: bizzare-formatter [-h] [-f FILE_OUT] [-c COLOR] [file]
+
+generate beautiful image of python code
+
+positional arguments:
+  file                  filename to generate from
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -f FILE_OUT, --file_out FILE_OUT
+                        filename to store in
+  -c COLOR, --color COLOR
+                        background color, submit number to use prefefined list of color, or nothing, to use them randomly. Otherwise use #FFFFFF notation.
+
+```

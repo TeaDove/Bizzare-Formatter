@@ -3,6 +3,8 @@ import argparse
 import os
 import select
 import sys
+from pathlib import Path
+import random
 
 from PIL import Image, ImageDraw, ImageOps
 from pygments import highlight
@@ -14,7 +16,7 @@ MAIN_COLOR = "#1E1E26"
 MAIN_COLOR_TUPLE = (30, 30, 38)
 
 DEFAULT_BACKGROUND_COLOR = "#D7ACB9"
-COLORS = ["#D7ACB9", '#87FFCC', '#E4E6E8', '#5EBA7D', '#848689']
+COLORS = ["#D7ACB9", '#87FFCC', '#E4E6E8', '#5EBA7D', '#848689', '#B99054', '#E6CB7D', '#5FCD82', '#C791C2', '#E5586B', '#4E9CB0', '#58255A']
 
 
 def generate_code(code: str):
@@ -41,7 +43,7 @@ def generate_im(code: str, filename_out: str = "image.png", background_color: st
 
     background.paste(im_from_pygments, box)
 
-    full_im = Image.new('RGBA', (ceil(window_im_size[0] * 2), ceil(window_im_size[1] * 1.4)), background_color)
+    full_im = Image.new('RGBA', (ceil(window_im_size[0] + 200), ceil(window_im_size[1] + 200)), background_color)
     box = (full_im.size[0] - window_im.size[0]) // 2, (full_im.size[1] - window_im.size[1]) // 2
 
     full_im.paste(background, box, background)
@@ -53,14 +55,13 @@ def main():
     parser.add_argument('file', nargs='?', action="store", help='filename to generate from')
     parser.add_argument('-f', '--file_out', action="store", help='filename to store in')
     parser.add_argument('-c', '--color', action="store",
-                        help='background color, default is {}'.format(DEFAULT_BACKGROUND_COLOR))
+                        help='background color, submit number to use prefefined list of color, or nothing, to use them randomly. Otherwise use #FFFFFF notation.'.format(DEFAULT_BACKGROUND_COLOR))
     args = parser.parse_args()
-    color = None
     if not args.color:
-        color = DEFAULT_BACKGROUND_COLOR
+        color = random.choice(COLORS)
     else:
         color = args.color
-
+    
     try:
         idx = int(color)
     except ValueError:
@@ -78,6 +79,10 @@ def main():
     else:
         print("Error, no file or pipe specified")
         sys.exit(1)
+
+    if args.file and not args.file_out:
+        args.file_out = Path(args.file).name + ".png"
+
 
     generate_im(code, args.file_out if args.file_out else 'image.png', color)
 
