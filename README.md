@@ -1,7 +1,7 @@
 # Bizzare formatter
 Easy way to create beautiful images from python code
 ## Install
-`pip3 install git+https://github.com/teadove/bizzare_formatter`
+`pip3 install git+https://github.com/teadove/bizzare-formatter`
 ## Examples
 inputted code in `example.py`:
 ```angular2html
